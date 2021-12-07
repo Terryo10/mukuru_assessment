@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_provider.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_repository.dart';
-import 'package:mukuru_app/repositories/exchange_rates_repository/exchange_rates_provider.dart';
-import 'package:mukuru_app/repositories/exchange_rates_repository/exchange_rates_repository.dart';
+import 'package:mukuru_app/repositories/exchange_rates_repositories/exchange_rates_provider.dart';
+import 'package:mukuru_app/repositories/exchange_rates_repositories/exchange_rates_repository.dart';
+
 
 class AppRepositories extends StatelessWidget {
   final Widget appBlocs;

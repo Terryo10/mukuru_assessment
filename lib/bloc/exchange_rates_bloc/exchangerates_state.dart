@@ -1,6 +1,6 @@
 part of 'exchangerates_bloc.dart';
 
 @immutable
-abstract class ExchangeratesState {}
+abstract class ExchangeRatesState {}
 
-class ExchangeratesInitial extends ExchangeratesState {}
+class ExchangeratesInitialState extends ExchangeRatesState {}

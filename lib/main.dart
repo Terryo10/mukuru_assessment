@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Exchenge App',
+      title: 'Exchange App',
       home: SplashScreen(),
     );
   }
