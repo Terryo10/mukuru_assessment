@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
+import 'package:mukuru_app/models/refined_currency_list_model.dart';
 
 class AddCurrency extends StatefulWidget {
   const AddCurrency({Key? key}) : super(key: key);
@@ -16,6 +17,9 @@ class _AddCurrencyState extends State<AddCurrency> {
       listener: (context, state) {},
       child: BlocBuilder<CurrencylistBloc, CurrencylistState>(
         builder: (context, state) {
+          if (state is CurrencylistLoadedState) {
+            return currencyList(data: state.data);
+          }
           return const Center(
             child: Text('add curency screen'),
           );
@@ -24,14 +28,22 @@ class _AddCurrencyState extends State<AddCurrency> {
     );
   }
 
-  Widget currencyCard() {
+  Widget currencyList({required data}) {
+    List<CurrencyRefinedModel> listToBeUsed = [];
+    data.forEach(
+        (k, v) => listToBeUsed.add(CurrencyRefinedModel(abr: k, name: v)));
+
+    return ListView.builder(
+        itemCount: listToBeUsed.length,
+        itemBuilder: (BuildContext context, int index) {
+          print(listToBeUsed[index]);
+          return currencyCard(listToBeUsed[index]);
+        });
+  }
+
+  Widget currencyCard(CurrencyRefinedModel data) {
     return GestureDetector(
-      onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SingleJobDetails(job!)),
-        // );
-      },
+      onTap: () {},
       child: Container(
         decoration: const BoxDecoration(
           boxShadow: [
@@ -60,10 +72,10 @@ class _AddCurrencyState extends State<AddCurrency> {
                       flex: 3,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            '',
-                            style: TextStyle(
+                            data.abr.toString(),
+                            style: const TextStyle(
                               fontSize: 20,
                               color: Colors.black,
                               fontFamily: 'CenturyGothicBold',
@@ -72,45 +84,11 @@ class _AddCurrencyState extends State<AddCurrency> {
                           ),
                         ],
                       )),
-                  const Expanded(flex: 1, child: Icon(Icons.navigate_next)),
+                  const Expanded(flex: 1, child: Icon(Icons.add)),
                 ],
               ),
               const SizedBox(
                 height: 2,
-              ),
-              Row(
-                children: const [
-                  Expanded(flex: 1, child: Icon(Icons.query_builder)),
-                  Expanded(
-                    flex: 4,
-                    child: Text(
-                      '',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontFamily: 'CenturyGothicBold',
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: const [
-                  Expanded(flex: 1, child: Icon(Icons.location_on)),
-                  Expanded(
-                    flex: 4,
-                    child: Text(
-                      '',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontFamily: 'CenturyGothicBold',
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ]),
           ),

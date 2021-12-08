@@ -20,6 +20,7 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
       yield CurrencylistLoadingState();
       try {
         var data = await currencyListRepository.getCurrencyList();
+        print('data fetched');
         yield CurrencylistLoadedState(data: data);
       } catch (e) {
         yield CurrencylistErrorState(message: e.toString());
