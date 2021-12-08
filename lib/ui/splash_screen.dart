@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
+import 'package:mukuru_app/ui/add_currency.dart';
+import 'package:mukuru_app/ui/extras/error_build.dart';
 import 'package:mukuru_app/ui/my_currencies.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,17 +14,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: MyCurrencies',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    MyCurrencies(),
+    AddCurrency()
   ];
 
   void _onItemTapped(int index) {
@@ -43,27 +37,28 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Currency Exchange'),
+          backgroundColor: Colors.amber[800],
         ),
         body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
           builder: (context, state) {
             if (state is CurrencylistLoadingState) {
               return loading();
             } else if (state is CurrencylistErrorState) {
-              return buildError(message: state.message);
+              return ErrorBuild(message: state.message);
             } else if (state is CurrencylistLoadedState) {
-              return const MyCurrencies();
+              return _widgetOptions.elementAt(_selectedIndex);
             }
-            return buildError(message: 'Oops Somethings Happened');
+            return const ErrorBuild(message: 'Oops Somethings Happened');
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.local_atm),
               label: 'My Currencies',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.add),
               label: 'Add Currency',
             ),
           ],
@@ -103,28 +98,5 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ],
         ));
-  }
-
-  Widget buildError({String? message}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Center(
-            child: RaisedButton(
-          color: Color(0xfff7892b), // backgrounds
-          textColor: Colors.white, // foreground
-          onPressed: () {},
-          child: Text('Retry'),
-        )),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            message ?? ' Failed to upload please try again ',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ],
-    );
   }
 }
