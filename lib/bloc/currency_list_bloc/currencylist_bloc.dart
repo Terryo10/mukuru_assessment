@@ -17,8 +17,13 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
   ) async* {
     //action comes here lol
     if (event is GetCurrencies) {
-      print('getting currencies');
       yield CurrencylistLoadingState();
+      try {
+        var data = await currencyListRepository.getCurrencyList();
+        yield CurrencylistLoadedState(data: data);
+      } catch (e) {
+        yield CurrencylistErrorState(message: e.toString());
+      }
     }
   }
 }

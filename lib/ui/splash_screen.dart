@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
+import 'package:mukuru_app/ui/my_currencies.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -10,24 +11,65 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: MyCurrencies',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CurrencylistBloc, CurrencylistState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is CurrencylistErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Oops Failed to get Currencies')));
+        }
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Currency Exchange'),
+        ),
         body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
           builder: (context, state) {
             if (state is CurrencylistLoadingState) {
               return loading();
             } else if (state is CurrencylistErrorState) {
               return buildError(message: state.message);
+            } else if (state is CurrencylistLoadedState) {
+              return const MyCurrencies();
             }
-            return const Center(
-              child: Text('kkkkk'),
-            );
+            return buildError(message: 'Oops Somethings Happened');
           },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'My Currencies',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.business),
+              label: 'Add Currency',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
         ),
       ),
     );
@@ -35,23 +77,23 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Widget loading() {
     return Padding(
-        padding: EdgeInsets.only(top: 100),
+        padding: const EdgeInsets.only(top: 100),
         child: Column(
           children: <Widget>[
             SizedBox(
               height: 200.0,
               child: Stack(
-                children: <Widget>[
+                children: const <Widget>[
                   Center(
                     child: SizedBox(
                       width: 200,
                       height: 200,
-                      child: new CircularProgressIndicator(
+                      child: CircularProgressIndicator(
                         backgroundColor: Color(0xfff7892b),
                       ),
                     ),
                   ),
-                  const Center(
+                  Center(
                       child: Text(
                     'Loading ...',
                     style: TextStyle(color: Colors.black),

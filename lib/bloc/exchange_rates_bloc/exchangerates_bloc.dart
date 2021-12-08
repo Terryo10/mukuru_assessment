@@ -17,7 +17,7 @@ class ExchangeRatesBloc extends Bloc<ExchangeRatesEvent, ExchangeRatesState> {
     ExchangeRatesEvent event,
   ) async* {
     if (event is GetExchangeRates) {
-      print('getting currencies');
+      print('getting Exchange Rates');
       yield ExchangeRatesLoadingState();
     }
   }

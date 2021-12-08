@@ -6,10 +6,9 @@ import 'package:http/http.dart' as http;
 class CurrencyListProvider {
   Future getCurrencies() async {
     String url = AppStrings.currencies;
-    
-      try {
-      var response =
-          await http.get(Uri.parse(url));
+
+    try {
+      var response = await http.get(Uri.parse(url));
       print(response.body);
 
       if (response.statusCode == 200) {

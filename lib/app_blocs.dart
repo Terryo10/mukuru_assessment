@@ -27,7 +27,7 @@ class AppBlocs extends StatelessWidget {
           create: (context) => ExchangeRatesBloc(
             exchangeRatesRepository:
                 RepositoryProvider.of<ExchangeRatesRepository>(context),
-          )..add(GetExchangeRates()),
+          ),
         ),
       ],
       child: app,
