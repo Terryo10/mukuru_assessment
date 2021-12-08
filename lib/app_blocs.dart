@@ -21,13 +21,13 @@ class AppBlocs extends StatelessWidget {
           create: (context) => CurrencylistBloc(
             currencyListRepository:
                 RepositoryProvider.of<CurrencyListRepository>(context),
-          ),
+          )..add(GetCurrencies()),
         ),
         BlocProvider(
           create: (context) => ExchangeRatesBloc(
             exchangeRatesRepository:
                 RepositoryProvider.of<ExchangeRatesRepository>(context),
-          ),
+          )..add(GetExchangeRates()),
         ),
       ],
       child: app,
