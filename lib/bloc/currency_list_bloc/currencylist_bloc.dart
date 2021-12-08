@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -39,7 +40,19 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
 
     if (event is AddCurrencyToUserList) {
       //copy old state to new state and add currencies
+      List emptyList = [];
+      var currenciesList = await storage.read(key: 'myCurrencyList');
 
+      List decodedCurrencyList = json.decode(currenciesList ?? '[]');
+      decodedCurrencyList.forEach((element) {
+        emptyList.add(element);
+        print(element);
+      });
+
+      emptyList.add(event.currencyRefinedModel);
+      print(emptyList);
+
+      yield CurrencylistLoadedState(data: null, myCurrencies: emptyList);
     }
   }
 }

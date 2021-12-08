@@ -43,6 +43,8 @@ class _AddCurrencyState extends State<AddCurrency> {
     return GestureDetector(
       onTap: () {
         //add currency to local storage
+        BlocProvider.of<CurrencylistBloc>(context)
+            .add(AddCurrencyToUserList(currencyRefinedModel: data));
       },
       child: Container(
         decoration: const BoxDecoration(

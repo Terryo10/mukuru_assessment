@@ -5,8 +5,11 @@ abstract class CurrencylistEvent {}
 
 class GetCurrencies extends CurrencylistEvent {}
 
-class AddCurrencyToUserList {
+class AddCurrencyToUserList extends CurrencylistEvent {
+ 
   final CurrencyRefinedModel currencyRefinedModel;
 
-  AddCurrencyToUserList(this.currencyRefinedModel);
+  AddCurrencyToUserList(
+      {
+      required this.currencyRefinedModel});
 }

@@ -13,6 +13,13 @@ class CurrencylistLoadedState extends CurrencylistState {
   final List myCurrencies;
 
   CurrencylistLoadedState({required this.myCurrencies, required this.data});
+
+  CurrencylistLoadedState copyWith({data, myCurrencies}) {
+    return CurrencylistLoadedState(
+      myCurrencies: myCurrencies ?? this.myCurrencies,
+      data: data ?? this.data
+    );
+  }
 }
 
 class CurrencylistErrorState extends CurrencylistState {
