@@ -10,8 +10,9 @@ class CurrencylistLoadingState extends CurrencylistState {}
 class CurrencylistLoadedState extends CurrencylistState {
   // ignore: prefer_typing_uninitialized_variables
   final data;
+  final List myCurrencies;
 
-  CurrencylistLoadedState({required this.data});
+  CurrencylistLoadedState({required this.myCurrencies, required this.data});
 }
 
 class CurrencylistErrorState extends CurrencylistState {

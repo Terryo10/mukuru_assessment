@@ -20,7 +20,7 @@ class AppBlocs extends StatelessWidget {
         BlocProvider(
           create: (context) => CurrencylistBloc(
             currencyListRepository:
-                RepositoryProvider.of<CurrencyListRepository>(context),
+                RepositoryProvider.of<CurrencyListRepository>(context), storage: storage,
           )..add(GetCurrencies()),
         ),
         BlocProvider(

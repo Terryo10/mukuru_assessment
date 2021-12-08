@@ -32,18 +32,18 @@ class _AddCurrencyState extends State<AddCurrency> {
     List<CurrencyRefinedModel> listToBeUsed = [];
     data.forEach(
         (k, v) => listToBeUsed.add(CurrencyRefinedModel(abr: k, name: v)));
-
     return ListView.builder(
         itemCount: listToBeUsed.length,
         itemBuilder: (BuildContext context, int index) {
-          print(listToBeUsed[index]);
           return currencyCard(listToBeUsed[index]);
         });
   }
 
   Widget currencyCard(CurrencyRefinedModel data) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        //add currency to local storage
+      },
       child: Container(
         decoration: const BoxDecoration(
           boxShadow: [
@@ -74,7 +74,7 @@ class _AddCurrencyState extends State<AddCurrency> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            data.abr.toString(),
+                            data.name.toString(),
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.black,
