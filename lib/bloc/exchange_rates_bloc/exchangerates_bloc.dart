@@ -16,8 +16,9 @@ class ExchangeRatesBloc extends Bloc<ExchangeRatesEvent, ExchangeRatesState> {
   Stream<ExchangeRatesState> mapEventToState(
     ExchangeRatesEvent event,
   ) async* {
-    if(event is GetExchangeRates){
-
+    if (event is GetExchangeRates) {
+      print('getting currencies');
+      yield ExchangeRatesLoadingState();
     }
   }
 }

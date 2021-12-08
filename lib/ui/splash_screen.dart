@@ -16,15 +16,19 @@ class _SplashScreenState extends State<SplashScreen> {
       listener: (context, state) {
         // TODO: implement listener
       },
-      child: BlocBuilder<CurrencylistBloc, CurrencylistState>(
-        builder: (context, state) {
-          if (state is CurrencylistLoadingState) {
-            return loading();
-          } else if (state is CurrencylistErrorState) {
-            return buildError(message: state.message);
-          }
-          return Container();
-        },
+      child: Scaffold(
+        body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
+          builder: (context, state) {
+            if (state is CurrencylistLoadingState) {
+              return loading();
+            } else if (state is CurrencylistErrorState) {
+              return buildError(message: state.message);
+            }
+            return const Center(
+              child: Text('kkkkk'),
+            );
+          },
+        ),
       ),
     );
   }

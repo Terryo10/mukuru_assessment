@@ -16,5 +16,9 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
     CurrencylistEvent event,
   ) async* {
     //action comes here lol
+    if (event is GetCurrencies) {
+      print('getting currencies');
+      yield CurrencylistLoadingState();
+    }
   }
 }

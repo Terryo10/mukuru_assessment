@@ -6,12 +6,14 @@ abstract class ExchangeRatesState {}
 class ExchangeratesInitialState extends ExchangeRatesState {}
 
 class ExchangeRatesLoadingState extends ExchangeRatesState {
-  final ExchangeRatesModel exchangeRatesModel;
 
-  ExchangeRatesLoadingState({required this.exchangeRatesModel});
 }
 
-class ExchangeRatesLoadedState extends ExchangeRatesState {}
+class ExchangeRatesLoadedState extends ExchangeRatesState {
+    final ExchangeRatesModel exchangeRatesModel;
+
+  ExchangeRatesLoadedState({required this.exchangeRatesModel});
+}
 
 class ExchangeRatesErrorState extends ExchangeRatesState {
   final String message;
