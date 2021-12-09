@@ -23,7 +23,7 @@ class ExchangeRatesModel {
   String? license;
   int? timestamp;
   String? base;
-  Map<String, double>? rates;
+  Map<String, num>? rates;
 
   factory ExchangeRatesModel.fromJson(Map<String, dynamic> json) =>
       ExchangeRatesModel(

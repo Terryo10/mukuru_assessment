@@ -77,7 +77,6 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
       {required ExchangeRatesModel exchangeRatesModel,
       required CurrencyRefinedModel selectedCurrency}) {
     var selectedRate = exchangeRatesModel.rates![selectedCurrency.abr];
-    print(selectedRate);
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 40, 8, 8),
         child: Column(
