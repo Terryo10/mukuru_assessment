@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
 import 'package:mukuru_app/ui/add_currency.dart';
 import 'package:mukuru_app/ui/extras/error_build.dart';
+import 'package:mukuru_app/ui/global_currency_convetor.dart';
 import 'package:mukuru_app/ui/my_currencies.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,8 +25,34 @@ class _SplashScreenState extends State<SplashScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Currency Exchange'),
+          title: const Text('My Currency Exchange'),
           backgroundColor: Colors.amber[800],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GlobalCurrencyConvetor()),
+                    );
+                  },
+                  child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Column(
+                        children: const [
+                          Icon(Icons.paid),
+                          Text('Convert'),
+                        ],
+                      )),
+                ),
+              ),
+            ),
+          ],
         ),
         body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
           builder: (context, state) {

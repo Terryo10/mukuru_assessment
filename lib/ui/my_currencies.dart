@@ -57,71 +57,72 @@ class _MyCurrenciesState extends State<MyCurrencies> {
           ),
         ],
       ),
-      child: Card(
-        shadowColor: Colors.black12,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.5),
-          side: const BorderSide(
-            width: 0.5,
-            color: Color(0xfff7892b),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PreviewCurrency()),
+          );
+          BlocProvider.of<ExchangeRatesBloc>(context)
+              .add(GetExchangeRates(selectedCurrency: data));
+        },
+        child: Card(
+          shadowColor: Colors.black12,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0.5),
+            side: const BorderSide(
+              width: 0.5,
+              color: Color(0xfff7892b),
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Column(children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PreviewCurrency()),
-                        );
-                        BlocProvider.of<ExchangeRatesBloc>(context)
-                            .add(GetExchangeRates(selectedCurrency: data));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${data.name.toString()} (${data.abr})',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontFamily: 'CenturyGothicBold',
-                              // fontWeight: FontWeight.bold,
-                            ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Column(children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: GestureDetector(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${data.name.toString()} (${data.abr})',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontFamily: 'CenturyGothicBold',
+                            // fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      )),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () {
-                      BlocProvider.of<CurrencylistBloc>(context).add(
-                          RemoveCurrencyFromUserList(
-                              currencyRefinedModel: data));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Currency Removed ')));
-                    },
-                    child: const Icon(
-                      Icons.delete_forever,
-                      color: Colors.red,
+                        ),
+                      ],
+                    )),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<CurrencylistBloc>(context).add(
+                            RemoveCurrencyFromUserList(
+                                currencyRefinedModel: data));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Currency Removed ')));
+                      },
+                      child: const Icon(
+                        Icons.delete_forever,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-          ]),
+                ],
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+            ]),
+          ),
         ),
       ),
     );

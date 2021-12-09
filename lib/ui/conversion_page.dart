@@ -48,7 +48,7 @@ class _ConversionPageState extends State<ConversionPage> {
       child: Column(
         children: <Widget>[
           _amountField(
-              'Enter amount you wish to convert for ${selectedCurrency.abr} currency'),
+              'Enter amount you wish to convert for ${selectedCurrency.abr} currency to USD'),
           _textConvertor(context,
               exchangeRatesModel: exchangeRatesModel,
               selectedCurrency: selectedCurrency)
@@ -67,7 +67,7 @@ class _ConversionPageState extends State<ConversionPage> {
       value = int.parse(amountController.text);
     }
 
-    var ratedValue = (value * selectedRate!);
+    var ratedValue = (value / selectedRate!);
     var format = formatCurrency.format(ratedValue);
     return Text('USD ' + format.toString(),
         style: const TextStyle(fontSize: 18));
@@ -90,6 +90,7 @@ class _ConversionPageState extends State<ConversionPage> {
             onChanged: (value) {
               setState(() {});
             },
+            maxLength: 15,
             maxLengthEnforcement:
                 MaxLengthEnforcement.truncateAfterCompositionEnds,
             controller: amountController,
