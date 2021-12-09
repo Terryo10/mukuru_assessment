@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mukuru_app/models/exchange_rate_model.dart';
+import 'package:mukuru_app/models/refined_currency_list_model.dart';
 import 'package:mukuru_app/repositories/exchange_rates_repositories/exchange_rates_repository.dart';
 
 part 'exchangerates_event.dart';
@@ -16,9 +17,13 @@ class ExchangeRatesBloc extends Bloc<ExchangeRatesEvent, ExchangeRatesState> {
   Stream<ExchangeRatesState> mapEventToState(
     ExchangeRatesEvent event,
   ) async* {
-    if (event is GetExchangeRates) {
-      print('getting Exchange Rates');
-      yield ExchangeRatesLoadingState();
+    var currentState = state;
+    if (currentState is ExchangeRatesLoadedState) {
+      if (event is GetExchangeRates) {}
+    } else {
+      if (event is GetExchangeRates) {
+        yield ExchangeRatesLoadingState();
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
+import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
 import 'package:mukuru_app/ui/preview_currency.dart';
 
@@ -42,11 +43,11 @@ class _MyCurrenciesState extends State<MyCurrencies> {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
-          return currencyCard(data[index]);
+          return currencyCard(data: data[index]);
         });
   }
 
-  Widget currencyCard(CurrencyRefinedModel data) {
+  Widget currencyCard({required CurrencyRefinedModel data}) {
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -79,6 +80,8 @@ class _MyCurrenciesState extends State<MyCurrencies> {
                       MaterialPageRoute(
                           builder: (context) => const PreviewCurrency()),
                     );
+                    BlocProvider.of<ExchangeRatesBloc>(context)
+                        .add(GetExchangeRates(selectedCurrency: data));
                   },
                   child: Expanded(
                       flex: 3,

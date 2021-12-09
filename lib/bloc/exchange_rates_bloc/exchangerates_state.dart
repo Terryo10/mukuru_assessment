@@ -5,14 +5,14 @@ abstract class ExchangeRatesState {}
 
 class ExchangeratesInitialState extends ExchangeRatesState {}
 
-class ExchangeRatesLoadingState extends ExchangeRatesState {
-
-}
+class ExchangeRatesLoadingState extends ExchangeRatesState {}
 
 class ExchangeRatesLoadedState extends ExchangeRatesState {
-    final ExchangeRatesModel exchangeRatesModel;
+  final ExchangeRatesModel exchangeRatesModel;
+  final CurrencyRefinedModel selectedCurrency;
 
-  ExchangeRatesLoadedState({required this.exchangeRatesModel});
+  ExchangeRatesLoadedState(
+      {required this.selectedCurrency, required this.exchangeRatesModel});
 }
 
 class ExchangeRatesErrorState extends ExchangeRatesState {
