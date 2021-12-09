@@ -1,25 +1,25 @@
 part of 'currencylist_bloc.dart';
 
 @immutable
-abstract class CurrencylistState {}
+abstract class CurrencylistState {
+  
+}
 
 class CurrencylistInitialState extends CurrencylistState {}
 
 class CurrencylistLoadingState extends CurrencylistState {}
 
 class CurrencylistLoadedState extends CurrencylistState {
-  // ignore: prefer_typing_uninitialized_variables
-  final data;
-  final List myCurrencies;
+  final dynamic data;
+  final List<CurrencyRefinedModel> myCurrencies;
 
-  CurrencylistLoadedState({required this.myCurrencies, required this.data});
+  CurrencylistLoadedState({required this.myCurrencies, this.data});
 
-  CurrencylistLoadedState copyWith({data, myCurrencies}) {
-    return CurrencylistLoadedState(
-      myCurrencies: myCurrencies ?? this.myCurrencies,
-      data: data ?? this.data
-    );
-  }
+ 
+  CurrencylistLoadedState copyWith({data, myCurrencies}) =>
+      CurrencylistLoadedState(
+          myCurrencies: myCurrencies ?? this.myCurrencies,
+          data: data ?? this.data);
 }
 
 class CurrencylistErrorState extends CurrencylistState {

@@ -13,18 +13,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    MyCurrencies(),
-    AddCurrency()
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<CurrencylistBloc, CurrencylistState>(
@@ -46,25 +34,22 @@ class _SplashScreenState extends State<SplashScreen> {
             } else if (state is CurrencylistErrorState) {
               return ErrorBuild(message: state.message);
             } else if (state is CurrencylistLoadedState) {
-              return _widgetOptions.elementAt(_selectedIndex);
+              return const MyCurrencies();
             }
             return const ErrorBuild(message: 'Oops Somethings Happened');
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_atm),
-              label: 'My Currencies',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add Currency',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print('navigating');
+            // Add your onPressed code here!
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddCurrency()),
+            );
+          },
+          backgroundColor: Colors.amber[800],
+          child: const Icon(Icons.add),
         ),
       ),
     );

@@ -13,17 +13,23 @@ class AddCurrency extends StatefulWidget {
 class _AddCurrencyState extends State<AddCurrency> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CurrencylistBloc, CurrencylistState>(
-      listener: (context, state) {},
-      child: BlocBuilder<CurrencylistBloc, CurrencylistState>(
-        builder: (context, state) {
-          if (state is CurrencylistLoadedState) {
-            return currencyList(data: state.data);
-          }
-          return const Center(
-            child: Text('add curency screen'),
-          );
-        },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Currency'),
+        backgroundColor: Colors.amber[800],
+      ),
+      body: BlocListener<CurrencylistBloc, CurrencylistState>(
+        listener: (context, state) {},
+        child: BlocBuilder<CurrencylistBloc, CurrencylistState>(
+          builder: (context, state) {
+            if (state is CurrencylistLoadedState) {
+              return currencyList(data: state.data);
+            }
+            return const Center(
+              child: Text('add curency screen'),
+            );
+          },
+        ),
       ),
     );
   }
@@ -45,6 +51,9 @@ class _AddCurrencyState extends State<AddCurrency> {
         //add currency to local storage
         BlocProvider.of<CurrencylistBloc>(context)
             .add(AddCurrencyToUserList(currencyRefinedModel: data));
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Currency Added  ')));
       },
       child: Container(
         decoration: const BoxDecoration(
