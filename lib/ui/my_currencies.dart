@@ -73,18 +73,18 @@ class _MyCurrenciesState extends State<MyCurrencies> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PreviewCurrency()),
-                    );
-                    BlocProvider.of<ExchangeRatesBloc>(context)
-                        .add(GetExchangeRates(selectedCurrency: data));
-                  },
-                  child: Expanded(
-                      flex: 3,
+                Expanded(
+                  flex: 3,
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PreviewCurrency()),
+                        );
+                        BlocProvider.of<ExchangeRatesBloc>(context)
+                            .add(GetExchangeRates(selectedCurrency: data));
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -100,20 +100,17 @@ class _MyCurrenciesState extends State<MyCurrencies> {
                         ],
                       )),
                 ),
-                GestureDetector(
-                    onTap: () {},
-                    child: const Expanded(
-                        flex: 1, child: Icon(Icons.trending_flat))),
-                GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<CurrencylistBloc>(context).add(
-                        RemoveCurrencyFromUserList(currencyRefinedModel: data));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Currency Removed ')));
-                  },
-                  child: const Expanded(
-                    flex: 1,
-                    child: Icon(
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<CurrencylistBloc>(context).add(
+                          RemoveCurrencyFromUserList(
+                              currencyRefinedModel: data));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Currency Removed ')));
+                    },
+                    child: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
                     ),

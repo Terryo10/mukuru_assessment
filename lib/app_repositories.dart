@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_provider.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_repository.dart';
 import 'package:mukuru_app/repositories/exchange_rates_repositories/exchange_rates_provider.dart';
@@ -9,9 +8,9 @@ import 'package:mukuru_app/repositories/exchange_rates_repositories/exchange_rat
 
 class AppRepositories extends StatelessWidget {
   final Widget appBlocs;
-  final FlutterSecureStorage storage;
+  
   const AppRepositories(
-      {Key? key, required this.appBlocs, required this.storage})
+      {Key? key, required this.appBlocs,})
       : super(key: key);
 
   @override

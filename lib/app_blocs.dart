@@ -9,8 +9,8 @@ import 'bloc/exchange_rates_bloc/exchangerates_bloc.dart';
 
 class AppBlocs extends StatelessWidget {
   final Widget app;
-  final FlutterSecureStorage storage;
-  const AppBlocs({Key? key, required this.app, required this.storage})
+ 
+  const AppBlocs({Key? key, required this.app})
       : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class AppBlocs extends StatelessWidget {
         BlocProvider(
           create: (context) => CurrencylistBloc(
             currencyListRepository:
-                RepositoryProvider.of<CurrencyListRepository>(context), storage: storage,
+                RepositoryProvider.of<CurrencyListRepository>(context), 
           )..add(GetCurrencies()),
         ),
         BlocProvider(

@@ -53,7 +53,7 @@ class _AddCurrencyState extends State<AddCurrency> {
             .add(AddCurrencyToUserList(currencyRefinedModel: data));
         Navigator.pop(context);
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Currency Added  ')));
+            .showSnackBar(const SnackBar(content: Text('Currency Added')));
       },
       child: Container(
         decoration: const BoxDecoration(

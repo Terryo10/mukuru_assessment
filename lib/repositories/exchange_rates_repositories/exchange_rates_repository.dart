@@ -7,6 +7,7 @@ class ExchangeRatesRepository {
   ExchangeRatesRepository({required this.provider});
 
   Future<ExchangeRatesModel> getExchangeRates() async {
+    
     var data = await provider.getExchangeRates();
 
     return exchangeRatesModelFromJson(data);

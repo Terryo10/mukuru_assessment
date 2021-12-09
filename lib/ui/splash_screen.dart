@@ -41,8 +41,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            print('navigating');
-            // Add your onPressed code here!
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AddCurrency()),

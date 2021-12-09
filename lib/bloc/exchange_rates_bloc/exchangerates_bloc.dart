@@ -19,10 +19,22 @@ class ExchangeRatesBloc extends Bloc<ExchangeRatesEvent, ExchangeRatesState> {
   ) async* {
     var currentState = state;
     if (currentState is ExchangeRatesLoadedState) {
-      if (event is GetExchangeRates) {}
+      if (event is GetExchangeRates) {
+        print('updating currency');
+        yield currentState.copyWith(selectedCurrency: event.selectedCurrency);
+      }
     } else {
       if (event is GetExchangeRates) {
-        yield ExchangeRatesLoadingState();
+        try {
+          yield ExchangeRatesLoadingState();
+          var data = await exchangeRatesRepository.getExchangeRates();
+          print('this is' + data.toString());
+          yield ExchangeRatesLoadedState(
+              selectedCurrency: event.selectedCurrency,
+              exchangeRatesModel: data);
+        } catch (e) {
+          yield ExchangeRatesErrorState(message: e.toString());
+        }
       }
     }
   }

@@ -13,6 +13,11 @@ class ExchangeRatesLoadedState extends ExchangeRatesState {
 
   ExchangeRatesLoadedState(
       {required this.selectedCurrency, required this.exchangeRatesModel});
+
+  ExchangeRatesLoadedState copyWith({exchangeRatesModel, selectedCurrency}) =>
+      ExchangeRatesLoadedState(
+          exchangeRatesModel: exchangeRatesModel ?? this.exchangeRatesModel,
+          selectedCurrency: selectedCurrency?? this.selectedCurrency);
 }
 
 class ExchangeRatesErrorState extends ExchangeRatesState {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
+import 'package:mukuru_app/models/exchange_rate_model.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
 
 import 'extras/currency_preview_error.dart';
@@ -24,14 +25,43 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
       ),
       body: BlocListener<ExchangeRatesBloc, ExchangeRatesState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is ExchangeRatesLoadedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Currency Loaded  ')));
+          }
         },
         child: BlocBuilder<ExchangeRatesBloc, ExchangeRatesState>(
           builder: (context, state) {
             if (state is ExchangeRatesLoadingState) {
               return loading();
             } else if (state is ExchangeRatesLoadedState) {
-              return Container();
+              return Column(
+                children: [
+                  Container(
+                    height: 30.0,
+                    color: Colors.orange[100],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          '${state.selectedCurrency.name} (${state.selectedCurrency.abr})',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: currencyCalculator(
+                        exchangeRatesModel: state.exchangeRatesModel,
+                        selectedCurrency: state.selectedCurrency),
+                  ),
+                ],
+              );
+            }
+            if (state is ExchangeRatesErrorState) {
+              return CurrencyPreviewError(
+                message: state.message,
+              );
             }
             return const CurrencyPreviewError(
               message: 'Oops Something Happened',
@@ -39,6 +69,14 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
           },
         ),
       ),
+    );
+  }
+
+  Widget currencyCalculator(
+      {required ExchangeRatesModel exchangeRatesModel,
+      required CurrencyRefinedModel selectedCurrency}) {
+    return Center(
+      child: Text(exchangeRatesModel.license.toString()),
     );
   }
 

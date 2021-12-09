@@ -12,9 +12,9 @@ part 'currencylist_state.dart';
 
 class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
   final CurrencyListRepository currencyListRepository;
-  final FlutterSecureStorage storage;
+  
   CurrencylistBloc({
-    required this.storage,
+    
     required this.currencyListRepository,
   }) : super(CurrencylistInitialState());
 
