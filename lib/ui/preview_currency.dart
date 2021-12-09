@@ -4,6 +4,7 @@ import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
 import 'package:mukuru_app/models/exchange_rate_model.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
 
+import 'conversion_page.dart';
 import 'extras/currency_preview_error.dart';
 
 class PreviewCurrency extends StatefulWidget {
@@ -75,9 +76,48 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
   Widget currencyCalculator(
       {required ExchangeRatesModel exchangeRatesModel,
       required CurrencyRefinedModel selectedCurrency}) {
-    return Center(
-      child: Text(exchangeRatesModel.license.toString()),
-    );
+    var selectedRate = exchangeRatesModel.rates![selectedCurrency.abr];
+    print(selectedRate);
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(8, 40, 8, 8),
+        child: Column(
+          children: <Widget>[
+            Text(
+                'the current Exchange rate for ${selectedCurrency.abr} aganist USD is $selectedRate '),
+            const SizedBox(height: 15),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ConversionPage()),
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.grey.shade200,
+                          offset: const Offset(2, 4),
+                          blurRadius: 5,
+                          spreadRadius: 2)
+                    ],
+                    gradient: const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+                child: const Text(
+                  'Go To Conversion Page',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget loading() {
