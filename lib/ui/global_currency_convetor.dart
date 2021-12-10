@@ -20,16 +20,13 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
   final amountController = TextEditingController();
   final formatCurrency =
       NumberFormat.simpleCurrency(locale: Platform.localeName, name: 'USD');
-  String dropDownValue = "USD | United States Dollar";
-  var testIndex = 0;
+  String? dropDownValue;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ExchangeRatesBloc>(context).add(
         GetExchangeRates(selectedCurrency: CurrencyRefinedModel(abr: 'USD')));
-
-
   }
 
   @override
@@ -66,7 +63,7 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                 state.data!.forEach((k, v) => currencyList.add('$k | $v'));
 
                 return DropdownButton<String>(
-                  value: currencyList[testIndex],
+                  value: dropDownValue,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   style: const TextStyle(color: Colors.deepPurple),
@@ -81,12 +78,12 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                       print(currencyList);
                       print("I am here 2");
                       print(newValue);
-
-                      //testIndex = currencyList.indexOf(newValue!);
-                      //if (testIndex < 0) {
-                      //  testIndex = 0;
-                      //}
+                      dropDownValue = newValue;
                     });
+                    BlocProvider.of<ExchangeRatesBloc>(context).add(
+                        GetExchangeRates(
+                            selectedCurrency: CurrencyRefinedModel(
+                                abr: dropDownValue!.substring(0, 3))));
                   },
                   items: currencyList
                       .map<DropdownMenuItem<String>>((String value) {
@@ -96,28 +93,6 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                     );
                   }).toList(),
                 );
-                // return DropdownButtonFormField(
-                //   decoration: InputDecoration(
-                //       filled: true,
-                //       hintStyle: TextStyle(color: Colors.grey[800]),
-                //       hintText: "Select Currency",
-                //       fillColor: const Color(0xfff7892b)),
-                //   value: dropDownValue,
-                //   onChanged: (String? value) {
-                //     print(value);
-                //     setState(() {
-                //       dropDownValue = value!;
-                //     });
-                //     BlocProvider.of<ExchangeRatesBloc>(context).add(
-                //         GetExchangeRates(
-                //             selectedCurrency: CurrencyRefinedModel(
-                //                 abr: dropDownValue.substring(0, 3))));
-                //   },
-                //   items: currencyList
-                //       .map((currencyTitle) => DropdownMenuItem(
-                //           value: currencyTitle, child: Text(currencyTitle)))
-                //       .toList(),
-                // );
               }
               return Container();
             },
