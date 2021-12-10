@@ -20,14 +20,16 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
   final amountController = TextEditingController();
   final formatCurrency =
       NumberFormat.simpleCurrency(locale: Platform.localeName, name: 'USD');
-  String? dropDownValue;
-  List<String> currencyList = [];
+  String dropDownValue = "USD | United States Dollar";
+  var testIndex = 0;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ExchangeRatesBloc>(context).add(
         GetExchangeRates(selectedCurrency: CurrencyRefinedModel(abr: 'USD')));
+
+
   }
 
   @override
@@ -59,29 +61,63 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
         children: <Widget>[
           BlocBuilder<CurrencylistBloc, CurrencylistState>(
             builder: (context, state) {
+              List<String> currencyList = [];
               if (state is CurrencylistLoadedState) {
                 state.data!.forEach((k, v) => currencyList.add('$k | $v'));
-                return DropdownButtonFormField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      hintStyle: TextStyle(color: Colors.grey[800]),
-                      hintText: "Select Currency",
-                      fillColor: const Color(0xfff7892b)),
-                  value: dropDownValue,
-                  onChanged: (String? value) {
+
+                return DropdownButton<String>(
+                  value: currencyList[testIndex],
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? newValue) {
                     setState(() {
-                      dropDownValue = value;
+                      // testCurrency = newValue!;
+                      print("I am here");
+                      print(currencyList);
+                      print("I am here 2");
+                      print(newValue);
+
+                      //testIndex = currencyList.indexOf(newValue!);
+                      //if (testIndex < 0) {
+                      //  testIndex = 0;
+                      //}
                     });
-                    BlocProvider.of<ExchangeRatesBloc>(context).add(
-                        GetExchangeRates(
-                            selectedCurrency: CurrencyRefinedModel(
-                                abr: dropDownValue!.substring(0, 3))));
                   },
                   items: currencyList
-                      .map((currencyTitle) => DropdownMenuItem(
-                          value: currencyTitle, child: Text(currencyTitle)))
-                      .toList(),
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 );
+                // return DropdownButtonFormField(
+                //   decoration: InputDecoration(
+                //       filled: true,
+                //       hintStyle: TextStyle(color: Colors.grey[800]),
+                //       hintText: "Select Currency",
+                //       fillColor: const Color(0xfff7892b)),
+                //   value: dropDownValue,
+                //   onChanged: (String? value) {
+                //     print(value);
+                //     setState(() {
+                //       dropDownValue = value!;
+                //     });
+                //     BlocProvider.of<ExchangeRatesBloc>(context).add(
+                //         GetExchangeRates(
+                //             selectedCurrency: CurrencyRefinedModel(
+                //                 abr: dropDownValue.substring(0, 3))));
+                //   },
+                //   items: currencyList
+                //       .map((currencyTitle) => DropdownMenuItem(
+                //           value: currencyTitle, child: Text(currencyTitle)))
+                //       .toList(),
+                // );
               }
               return Container();
             },
