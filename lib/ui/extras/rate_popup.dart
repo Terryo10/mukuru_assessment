@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
+import 'package:mukuru_app/ui/splash_screen.dart';
 
 class LogoutPopup extends StatefulWidget {
   final CurrencyRefinedModel modelWithRate;
@@ -62,12 +63,19 @@ class _LogoutPopupState extends State<LogoutPopup> {
                       print('not submitting');
                     } else {
                       BlocProvider.of<CurrencylistBloc>(context).add(
-                          AddCurrencyToUserList(
-                              currencyRefinedModel: CurrencyRefinedModel(
-                                  abr: widget.modelWithRate.abr,
-                                  name: widget.modelWithRate.name,
-                                  warningRate:
-                                      int.parse(rateController.text))));
+                        AddCurrencyToUserList(
+                          currencyRefinedModel: CurrencyRefinedModel(
+                            abr: widget.modelWithRate.abr,
+                            name: widget.modelWithRate.name,
+                            warningRate: int.parse(rateController.text),
+                          ),
+                        ),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SplashScreen()),
+                      );
                       ;
                     }
                   },

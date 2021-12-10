@@ -84,6 +84,9 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
             Text(
                 'the current Exchange rate for ${selectedCurrency.abr} aganist USD is $selectedRate '),
             const SizedBox(height: 15),
+            Text(
+                'Your Selected minimum rate is ${selectedCurrency.warningRate}'),
+            const SizedBox(height: 15),
             InkWell(
               onTap: () {
                 Navigator.push(
