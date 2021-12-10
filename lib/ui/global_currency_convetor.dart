@@ -63,6 +63,7 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                 state.data!.forEach((k, v) => currencyList.add('$k | $v'));
 
                 return DropdownButton<String>(
+                  hint: const Text('Select Currency'),
                   value: dropDownValue,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,

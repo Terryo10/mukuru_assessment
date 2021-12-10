@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
+import 'package:mukuru_app/ui/extras/rate_popup.dart';
 
 class AddCurrency extends StatefulWidget {
   const AddCurrency({Key? key}) : super(key: key);
@@ -45,15 +46,22 @@ class _AddCurrencyState extends State<AddCurrency> {
         });
   }
 
+  void _showDialog(CurrencyRefinedModel model) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return LogoutPopup(
+            modelWithRate: model,
+          );
+        });
+  }
+
   Widget currencyCard(CurrencyRefinedModel data) {
     return GestureDetector(
       onTap: () {
         //add currency to local storage
-        BlocProvider.of<CurrencylistBloc>(context)
-            .add(AddCurrencyToUserList(currencyRefinedModel: data));
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Currency Added')));
+        _showDialog(data);
       },
       child: Container(
         decoration: const BoxDecoration(

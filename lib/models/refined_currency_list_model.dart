@@ -10,20 +10,24 @@ String currencyRefinedModelToJson(CurrencyRefinedModel data) => json.encode(data
 
 class CurrencyRefinedModel {
     CurrencyRefinedModel({
-        this.abr,
         this.name,
+        this.abr,
+        this.warningRate,
     });
 
-    String? abr;
-    String? name;
+    String ? name;
+    String ? abr;
+    int ? warningRate;
 
     factory CurrencyRefinedModel.fromJson(Map<String, dynamic> json) => CurrencyRefinedModel(
-        abr: json["abr"] == null ? null : json["abr"],
         name: json["name"] == null ? null : json["name"],
+        abr: json["abr"] == null ? null : json["abr"],
+        warningRate: json["warning_rate"] == null ? null : json["warning_rate"],
     );
 
     Map<String, dynamic> toJson() => {
-        "abr": abr == null ? null : abr,
         "name": name == null ? null : name,
+        "abr": abr == null ? null : abr,
+        "warning_rate": warningRate == null ? null : warningRate,
     };
 }
