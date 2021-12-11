@@ -49,12 +49,17 @@ class _MyCurrenciesState extends State<MyCurrencies> {
           print(data[index].monitoredCurrency);
           // var mappedString = json.encode(data[index].monitoredCurrency);
           return currencyCard(
-              data:
-                  currencyRefinedModelFromJson(data[index].monitoredCurrency));
+              data: currencyRefinedModelFromJson(data[index].monitoredCurrency),
+              state: CurrencyMonitor(
+                  id: data[index].id,
+                  monitoredCurrency: data[index].monitoredCurrency,
+                  rate: data[index].rate,
+                  updates: data[index].updates));
         });
   }
 
-  Widget currencyCard({required CurrencyRefinedModel data}) {
+  Widget currencyCard(
+      {required CurrencyRefinedModel data, required CurrencyMonitor state}) {
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -112,8 +117,7 @@ class _MyCurrenciesState extends State<MyCurrencies> {
                     child: GestureDetector(
                       onTap: () {
                         BlocProvider.of<CurrencylistBloc>(context).add(
-                            RemoveCurrencyFromUserList(
-                                currencyRefinedModel: data));
+                            RemoveCurrencyFromUserList(currencyMonitor: state));
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Currency Removed ')));
                       },

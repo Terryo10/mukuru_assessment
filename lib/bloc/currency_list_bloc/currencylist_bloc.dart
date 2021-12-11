@@ -55,12 +55,16 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
 
     if (event is RemoveCurrencyFromUserList) {
       if (currentState is CurrencylistLoadedState) {
-        var currentList =
-            await DatabaseHelper.instance.removeCurrency();
+        await DatabaseHelper.instance
+            .removeCurrency(id: int.parse(event.currencyMonitor.id.toString()));
         // currentList.remove(event.currencyRefinedModel);
+        var currentList =
+            await DatabaseHelper.instance.getMonitoredCurrencies();
 
         yield currentState.copyWith(myCurrencies: currentList);
       }
     }
+
+    
   }
 }
