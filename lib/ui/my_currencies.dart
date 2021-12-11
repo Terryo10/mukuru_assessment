@@ -37,6 +37,7 @@ class _MyCurrenciesState extends State<MyCurrencies> {
     );
   }
 
+
   Widget myCurrencies({required List<CurrencyMonitor> data}) {
     if (data.isEmpty) {
       return const Center(

@@ -23,61 +23,68 @@ class _SplashScreenState extends State<SplashScreen> {
               const SnackBar(content: Text('Oops Failed to get Currencies')));
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('My Currency Exchange'),
-          backgroundColor: Colors.amber[800],
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GlobalCurrencyConvetor()),
-                    );
-                  },
-                  child: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Column(
-                        children: const [
-                          Icon(Icons.paid),
-                          Text('Convert'),
-                        ],
-                      )),
+      child: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('My Currency Exchange'),
+            backgroundColor: Colors.amber[800],
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GlobalCurrencyConvetor()),
+                      );
+                    },
+                    child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Column(
+                          children: const [
+                            Icon(Icons.paid),
+                            Text('Convert'),
+                          ],
+                        )),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
-          builder: (context, state) {
-            if (state is CurrencylistLoadingState) {
-              return loading();
-            } else if (state is CurrencylistErrorState) {
-              return ErrorBuild(message: state.message);
-            } else if (state is CurrencylistLoadedState) {
-              return const MyCurrencies();
-            }
-            return const ErrorBuild(message: 'Oops Somethings Happened');
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddCurrency()),
-            );
-          },
-          backgroundColor: Colors.amber[800],
-          child: const Icon(Icons.add),
+            ],
+          ),
+          body: BlocBuilder<CurrencylistBloc, CurrencylistState>(
+            builder: (context, state) {
+              if (state is CurrencylistLoadingState) {
+                return loading();
+              } else if (state is CurrencylistErrorState) {
+                return ErrorBuild(message: state.message);
+              } else if (state is CurrencylistLoadedState) {
+                return const MyCurrencies();
+              }
+              return const ErrorBuild(message: 'Oops Somethings Happened');
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddCurrency()),
+              );
+            },
+            backgroundColor: Colors.amber[800],
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    return true;
   }
 
   Widget loading() {

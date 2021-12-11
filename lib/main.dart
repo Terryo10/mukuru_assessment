@@ -6,7 +6,7 @@ import 'package:mukuru_app/ui/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var appConfig = AppRepositories(
+  var appConfig = const AppRepositories(
     appBlocs: AppBlocs(
       app: MyApp(),
     ),
@@ -15,7 +15,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
