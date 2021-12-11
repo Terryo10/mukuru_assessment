@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:mukuru_app/database/monitored_currencies_database.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
+import 'package:mukuru_app/models/watched_logs_model.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_repository.dart';
 
 part 'currencylist_event.dart';
@@ -43,7 +44,7 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
               monitoredCurrency:
                   json.encode(event.currencyRefinedModel.toJson()),
               rate: event.currencyRefinedModel.warningRate.toString(),
-              updates: '[]'),
+              updates: json.encode([])),
         );
         var currentList =
             await DatabaseHelper.instance.getMonitoredCurrencies();
@@ -57,7 +58,6 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
       if (currentState is CurrencylistLoadedState) {
         await DatabaseHelper.instance
             .removeCurrency(id: int.parse(event.currencyMonitor.id.toString()));
-        // currentList.remove(event.currencyRefinedModel);
         var currentList =
             await DatabaseHelper.instance.getMonitoredCurrencies();
 
@@ -65,6 +65,20 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
       }
     }
 
-    
+    if (event is AutoUpdateCurrencyFromUserList) {
+      var currentTime = DateTime.now();
+      var oldCurrencyMonitor = event.currencyMonitor;
+      List<WatchedLogsModel> oldList = jsonDecode(oldCurrencyMonitor.updates);
+      oldList.add(WatchedLogsModel(
+          checkedAt: currentTime,
+          minimumRate: event.minimumRate,
+          rate: double.parse(oldCurrencyMonitor.rate)));
+      var newList = jsonEncode(oldList);
+      await DatabaseHelper.instance.updateCurrency(
+          currencyMonitor: CurrencyMonitor(
+              monitoredCurrency: event.currencyMonitor.monitoredCurrency,
+              rate: event.currencyMonitor.rate,
+              updates: newList));
+    }
   }
 }

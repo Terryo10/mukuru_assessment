@@ -79,4 +79,10 @@ class DatabaseHelper {
     return await db
         .delete('currency_monitor', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<int> updateCurrency({required CurrencyMonitor currencyMonitor}) async {
+    Database db = await instance.database;
+    return await db.update('currency_monitor', currencyMonitor.toMap(),
+        where: 'id = ?', whereArgs: [currencyMonitor.id]);
+  }
 }
