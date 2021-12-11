@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
+import 'package:mukuru_app/database/monitored_currencies_database.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
 import 'package:mukuru_app/repositories/currency_list_repository/currency_list_repository.dart';
 
@@ -12,9 +13,8 @@ part 'currencylist_state.dart';
 
 class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
   final CurrencyListRepository currencyListRepository;
-  
+
   CurrencylistBloc({
-    
     required this.currencyListRepository,
   }) : super(CurrencylistInitialState());
 
@@ -27,7 +27,8 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
     if (event is GetCurrencies) {
       yield CurrencylistLoadingState();
       try {
-        List<CurrencyRefinedModel> currencyList = [];
+        var currencyList =
+            await DatabaseHelper.instance.getMonitoredCurrencies();
         var data = await currencyListRepository.getCurrencyList();
         yield CurrencylistLoadedState(data: data, myCurrencies: currencyList);
       } catch (e) {
@@ -37,22 +38,26 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
 
     if (event is AddCurrencyToUserList) {
       if (currentState is CurrencylistLoadedState) {
-        
-        List<CurrencyRefinedModel> currentList =
-            currentState.myCurrencies.toList();
-        currentList.add(event.currencyRefinedModel);
-        print(currentList);
+        await DatabaseHelper.instance.addCurrency(
+          currencyMonitor: CurrencyMonitor(
+              monitoredCurrency:
+                  json.encode(event.currencyRefinedModel.toJson()),
+              rate: event.currencyRefinedModel.warningRate.toString(),
+              updates: '[]'),
+        );
+        var currentList =
+            await DatabaseHelper.instance.getMonitoredCurrencies();
 
+        // currentList.add(event.currencyRefinedModel);
         yield currentState.copyWith(myCurrencies: currentList);
       }
     }
 
     if (event is RemoveCurrencyFromUserList) {
       if (currentState is CurrencylistLoadedState) {
-        
-        List<CurrencyRefinedModel> currentList =
-            currentState.myCurrencies.toList();
-        currentList.remove(event.currencyRefinedModel);
+        var currentList =
+            await DatabaseHelper.instance.removeCurrency();
+        // currentList.remove(event.currencyRefinedModel);
 
         yield currentState.copyWith(myCurrencies: currentList);
       }

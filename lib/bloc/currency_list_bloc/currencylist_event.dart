@@ -22,9 +22,20 @@ class AddCurrencyToUserList extends CurrencylistEvent {
 
 class RemoveCurrencyFromUserList extends CurrencylistEvent {
  
-  final CurrencyRefinedModel currencyRefinedModel;
+  final CurrencyMonitor currencyMonitor;
 
-  RemoveCurrencyFromUserList({required this.currencyRefinedModel});
+  RemoveCurrencyFromUserList({required this.currencyMonitor});
+
+  @override
+  
+  List<Object?> get props => [];
+}
+
+class AutoUpdateCurrencyFromUserList extends CurrencylistEvent {
+ 
+  final AutoUpdateCurrencyFromUserList currencyRefinedModel;
+
+  AutoUpdateCurrencyFromUserList({required this.currencyRefinedModel});
 
   @override
   

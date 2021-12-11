@@ -75,17 +75,17 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
 
   Widget currencyCalculator(
       {required ExchangeRatesModel exchangeRatesModel,
-      required CurrencyRefinedModel selectedCurrency}) {
+      required CurrencyRefinedModel selectedCurrency,}) {
     var selectedRate = exchangeRatesModel.rates![selectedCurrency.abr];
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 40, 8, 8),
         child: Column(
           children: <Widget>[
             Text(
-                'the current Exchange rate for ${selectedCurrency.abr} aganist USD is $selectedRate '),
+                'The current Exchange rate for ${selectedCurrency.abr} aganist USD is $selectedRate '),
             const SizedBox(height: 15),
             Text(
-                'Your Selected minimum rate is ${selectedCurrency.warningRate}'),
+                'Your selected minimum rate is ${selectedCurrency.warningRate}'),
             const SizedBox(height: 15),
             InkWell(
               onTap: () {

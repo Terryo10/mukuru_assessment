@@ -1,9 +1,7 @@
 part of 'currencylist_bloc.dart';
 
 @immutable
-abstract class CurrencylistState {
-  
-}
+abstract class CurrencylistState {}
 
 class CurrencylistInitialState extends CurrencylistState {}
 
@@ -11,11 +9,11 @@ class CurrencylistLoadingState extends CurrencylistState {}
 
 class CurrencylistLoadedState extends CurrencylistState {
   final dynamic data;
-  final List<CurrencyRefinedModel> myCurrencies;
+  // final List<CurrencyRefinedModel> myCurrencies;
+  final List<CurrencyMonitor> myCurrencies;
 
   CurrencylistLoadedState({required this.myCurrencies, this.data});
 
- 
   CurrencylistLoadedState copyWith({data, myCurrencies}) =>
       CurrencylistLoadedState(
           myCurrencies: myCurrencies ?? this.myCurrencies,
