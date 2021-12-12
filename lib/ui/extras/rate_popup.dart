@@ -60,7 +60,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
                   text: 'Submit',
                   onPressed: () {
                     if (rateController.text.isEmpty) {
-                      print('not submitting');
+                     
                     } else {
                       BlocProvider.of<CurrencylistBloc>(context).add(
                         AddCurrencyToUserList(

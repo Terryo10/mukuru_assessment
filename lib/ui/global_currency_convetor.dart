@@ -75,10 +75,7 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                   onChanged: (String? newValue) {
                     setState(() {
                       // testCurrency = newValue!;
-                      print("I am here");
-                      print(currencyList);
-                      print("I am here 2");
-                      print(newValue);
+                      
                       dropDownValue = newValue;
                     });
                     BlocProvider.of<ExchangeRatesBloc>(context).add(

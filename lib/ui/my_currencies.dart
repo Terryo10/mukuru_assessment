@@ -46,8 +46,7 @@ class _MyCurrenciesState extends State<MyCurrencies> {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
-          print(data[index].monitoredCurrency);
-          // var mappedString = json.encode(data[index].monitoredCurrency);
+          
           return currencyCard(
               data: currencyRefinedModelFromJson(data[index].monitoredCurrency),
               state: CurrencyMonitor(

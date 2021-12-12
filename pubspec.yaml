@@ -41,6 +41,8 @@ dependencies:
   sqflite: ^2.0.1
   path_provider: ^2.0.8
   android_alarm_manager: ^2.0.2
+  mockito: ^5.0.16
+  bloc_test: ^8.0.0
 
 dev_dependencies:
   flutter_test:

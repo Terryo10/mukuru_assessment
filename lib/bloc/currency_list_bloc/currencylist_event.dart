@@ -30,7 +30,15 @@ class AutoUpdateCurrencyFromUserList extends CurrencylistEvent {
   final CurrencyMonitor currencyMonitor;
   final double minimumRate;
 
-  AutoUpdateCurrencyFromUserList( {required this.minimumRate,required this.currencyMonitor});
+  AutoUpdateCurrencyFromUserList(
+      {required this.minimumRate, required this.currencyMonitor});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class AutoUpdateAllCurrenciesList extends CurrencylistEvent {
+  AutoUpdateAllCurrenciesList();
 
   @override
   List<Object?> get props => [];
