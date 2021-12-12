@@ -67,7 +67,7 @@ class _LogoutPopupState extends State<LogoutPopup> {
                           currencyRefinedModel: CurrencyRefinedModel(
                             abr: widget.modelWithRate.abr,
                             name: widget.modelWithRate.name,
-                            warningRate: int.parse(rateController.text),
+                            warningRate: double.parse(rateController.text),
                           ),
                         ),
                       );

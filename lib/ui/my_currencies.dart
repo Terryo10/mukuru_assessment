@@ -37,7 +37,6 @@ class _MyCurrenciesState extends State<MyCurrencies> {
     );
   }
 
-
   Widget myCurrencies({required List<CurrencyMonitor> data}) {
     if (data.isEmpty) {
       return const Center(
@@ -74,7 +73,10 @@ class _MyCurrenciesState extends State<MyCurrencies> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PreviewCurrency()),
+            MaterialPageRoute(
+                builder: (context) => PreviewCurrency(
+                      id: int.parse(state.id.toString()),
+                    )),
           );
           BlocProvider.of<ExchangeRatesBloc>(context)
               .add(GetExchangeRates(selectedCurrency: data));

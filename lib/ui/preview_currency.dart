@@ -10,8 +10,10 @@ import 'conversion_page.dart';
 import 'extras/currency_preview_error.dart';
 
 class PreviewCurrency extends StatefulWidget {
+  final int id;
   const PreviewCurrency({
     Key? key,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -128,10 +130,8 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                 builder: (context, state) {
               if (state is CurrencylistLoadedState) {
                 // get list of transaction from user currency list
-                var transactions = state.myCurrencies.firstWhere((element) =>
-                    currencyRefinedModelFromJson(element.monitoredCurrency)
-                        .abr ==
-                    'AUD');
+                var transactions = state.myCurrencies
+                    .firstWhere((element) => element.id == widget.id);
 
                 return Column(
                   children: [
@@ -193,14 +193,7 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
         ],
       ),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PreviewCurrency()),
-          );
-          BlocProvider.of<ExchangeRatesBloc>(context)
-              .add(GetExchangeRates(selectedCurrency: data));
-        },
+        onTap: () {},
         child: Card(
           shadowColor: Colors.black12,
           shape: RoundedRectangleBorder(

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
 import 'package:mukuru_app/database/monitored_currencies_database.dart';
@@ -69,16 +68,36 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
     }
 
     if (event is AutoUpdateCurrencyFromUserList) {
+      var selectedCurrency =
+          currencyRefinedModelFromJson(event.currencyMonitor.monitoredCurrency);
+      exchangeRatesBloc.add(
+        GetExchangeRates(
+          selectedCurrency: CurrencyRefinedModel(
+              abr: selectedCurrency.abr,
+              name: selectedCurrency.name,
+              warningRate: selectedCurrency.warningRate),
+        ),
+      );
+
       var currentTime = DateTime.now();
       var oldCurrencyMonitor = event.currencyMonitor;
       List oldList = jsonDecode(oldCurrencyMonitor.updates);
-      oldList.add(WatchedLogsModel(
-          checkedAt: currentTime,
-          minimumRate: event.minimumRate,
-          //new rate from server
-          rate: double.parse(oldCurrencyMonitor.rate)));
+      var currentExchangeState = exchangeRatesBloc.state;
+      if (currentExchangeState is ExchangeRatesLoadedState) {
+        var selectedRate = currentExchangeState
+            .exchangeRatesModel.rates![selectedCurrency.abr];
+        oldList.add(
+          WatchedLogsModel(
+            checkedAt: currentTime,
+            minimumRate: event.minimumRate,
+            //new rate from server
+            rate: selectedRate!.toDouble(),
+          ),
+        );
+      }
+
       var newList = jsonEncode(oldList);
-      print(event.currencyMonitor.id);
+     
       await DatabaseHelper.instance.updateCurrency(
           currencyMonitor: CurrencyMonitor(
               id: event.currencyMonitor.id,

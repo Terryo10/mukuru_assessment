@@ -21,7 +21,9 @@ class ExchangeRatesBloc extends Bloc<ExchangeRatesEvent, ExchangeRatesState> {
     if (currentState is ExchangeRatesLoadedState) {
       if (event is GetExchangeRates) {
         print('updating currency');
-        yield currentState.copyWith(selectedCurrency: event.selectedCurrency);
+        var data = await exchangeRatesRepository.getExchangeRates();
+        yield currentState.copyWith(
+            selectedCurrency: event.selectedCurrency, exchangeRatesModel: data);
       }
     } else {
       if (event is GetExchangeRates) {
