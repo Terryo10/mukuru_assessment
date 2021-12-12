@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
@@ -25,6 +26,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    const oneSec = Duration(seconds: 120);
+    Timer.periodic(
+        oneSec,
+        (Timer t) => {
+              BlocProvider.of<CurrencylistBloc>(context)
+                  .add(AutoUpdateAllCurrenciesList())
+            });
   }
 
   @override

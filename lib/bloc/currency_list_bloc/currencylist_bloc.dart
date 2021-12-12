@@ -125,6 +125,7 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
           var oldCurrencyMonitor =
               currencyRefinedModelFromJson(element.monitoredCurrency);
           List oldList = jsonDecode(element.updates);
+
           var currentExchangeState = exchangeRatesBloc.state;
           if (currentExchangeState is ExchangeRatesLoadedState) {
             var selectedRate = currentExchangeState
@@ -136,6 +137,19 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
                 rate: selectedRate!.toDouble(),
               ),
             );
+            var newList = jsonEncode(oldList);
+            await DatabaseHelper.instance.updateCurrency(
+                currencyMonitor: CurrencyMonitor(
+                    id: element.id,
+                    monitoredCurrency: element.monitoredCurrency,
+                    rate: element.rate,
+                    updates: newList));
+            if (currentState is CurrencylistLoadedState) {
+              var currentList =
+                  await DatabaseHelper.instance.getMonitoredCurrencies();
+
+              yield currentState.copyWith(myCurrencies: currentList);
+            }
           }
         }
       }
