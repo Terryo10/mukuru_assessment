@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
 import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
+import 'package:mukuru_app/database/monitored_currencies_database.dart';
 import 'package:mukuru_app/models/exchange_rate_model.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
 
@@ -17,6 +19,7 @@ class PreviewCurrency extends StatefulWidget {
 }
 
 class _PreviewCurrencyState extends State<PreviewCurrency> {
+  var pageRate = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +56,7 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                   ),
                   Expanded(
                     child: currencyCalculator(
+                        context: context,
                         exchangeRatesModel: state.exchangeRatesModel,
                         selectedCurrency: state.selectedCurrency),
                   ),
@@ -75,10 +79,11 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
 
   Widget currencyCalculator(
       {required ExchangeRatesModel exchangeRatesModel,
-      required CurrencyRefinedModel selectedCurrency,}) {
+      required CurrencyRefinedModel selectedCurrency,
+      required BuildContext context}) {
     var selectedRate = exchangeRatesModel.rates![selectedCurrency.abr];
     return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 40, 8, 8),
+        padding: const EdgeInsets.fromLTRB(8, 40, 8, 0),
         child: Column(
           children: <Widget>[
             Text(
@@ -117,9 +122,139 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
-            )
+            ),
+            const SizedBox(height: 15),
+            BlocBuilder<CurrencylistBloc, CurrencylistState>(
+                builder: (context, state) {
+              if (state is CurrencylistLoadedState) {
+                // get list of transaction from user currency list
+                var transactions = state.myCurrencies.firstWhere((element) =>
+                    currencyRefinedModelFromJson(element.monitoredCurrency)
+                        .abr ==
+                    'AUD');
+
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(25),
+                      // ignore: deprecated_member_use
+                      child: FlatButton(
+                        child: const Text(
+                          'refresh',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        color: Colors.blueAccent,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          BlocProvider.of<CurrencylistBloc>(context).add(
+                              AutoUpdateCurrencyFromUserList(
+                                  currencyMonitor: transactions,
+                                  minimumRate:
+                                      double.parse(transactions.rate)));
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Text(transactions.updates.toString()),
+                  ],
+                );
+              }
+              return const Text('Error Loading Transaction History');
+            }),
           ],
         ));
+  }
+
+  Widget transactionHistory({required List<CurrencyMonitor> data}) {
+    if (data.isEmpty) {
+      return const Center(
+        child: Text('You have no monitored currencies'),
+      );
+    }
+    return ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index) {
+          // print(data[index].monitoredCurrency);
+          // var mappedString = json.encode(data[index].monitoredCurrency);
+          return currencyCard(
+            data: currencyRefinedModelFromJson(data[index].monitoredCurrency),
+          );
+        });
+  }
+
+  Widget currencyCard({required CurrencyRefinedModel data}) {
+    return Container(
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 20.0,
+          ),
+        ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PreviewCurrency()),
+          );
+          BlocProvider.of<ExchangeRatesBloc>(context)
+              .add(GetExchangeRates(selectedCurrency: data));
+        },
+        child: Card(
+          shadowColor: Colors.black12,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0.5),
+            side: const BorderSide(
+              width: 0.5,
+              color: Color(0xfff7892b),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Column(children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: GestureDetector(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${data.name.toString()} (${data.abr})',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontFamily: 'CenturyGothicBold',
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.delete_forever,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget loading() {
