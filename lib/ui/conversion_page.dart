@@ -68,9 +68,22 @@ class _ConversionPageState extends State<ConversionPage> {
     }
 
     var ratedValue = (value / selectedRate!);
-    var format = formatCurrency.format(ratedValue);
-    return Text('USD ' + format.toString(),
-        style: const TextStyle(fontSize: 18));
+    var markUp = (7 / 100) * ratedValue;
+    var valueToBeUsed = ratedValue + markUp;
+
+    if (value > 200) {
+      //4 percent markup
+      var fourPercentMarkup = (4 / 100) * ratedValue;
+      valueToBeUsed = ratedValue + fourPercentMarkup;
+
+      var format = formatCurrency.format(valueToBeUsed);
+      return Text('USD ' + format.toString(),
+          style: const TextStyle(fontSize: 18));
+    } else {
+      var format = formatCurrency.format(valueToBeUsed);
+      return Text('USD ' + format.toString(),
+          style: const TextStyle(fontSize: 18));
+    }
   }
 
   Widget _amountField(String title, {bool isPassword = false}) {
