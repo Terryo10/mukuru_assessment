@@ -75,10 +75,7 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
                   onChanged: (String? newValue) {
                     setState(() {
                       // testCurrency = newValue!;
-                      print("I am here");
-                      print(currencyList);
-                      print("I am here 2");
-                      print(newValue);
+
                       dropDownValue = newValue;
                     });
                     BlocProvider.of<ExchangeRatesBloc>(context).add(
@@ -119,9 +116,22 @@ class _GlobalCurrencyConvetorState extends State<GlobalCurrencyConvetor> {
     }
 
     var ratedValue = (value / selectedRate!);
-    var format = formatCurrency.format(ratedValue);
-    return Text('USD ' + format.toString(),
-        style: const TextStyle(fontSize: 18));
+    var markUp = (7 / 100) * ratedValue;
+    var valueToBeUsed = ratedValue + markUp;
+
+    if (value > 200) {
+      //4 percent markup
+      var fourPercentMarkup = (4 / 100) * ratedValue;
+      valueToBeUsed = ratedValue + fourPercentMarkup;
+
+      var format = formatCurrency.format(valueToBeUsed);
+      return Text('USD ' + format.toString(),
+          style: const TextStyle(fontSize: 18));
+    } else {
+      var format = formatCurrency.format(valueToBeUsed);
+      return Text('USD ' + format.toString(),
+          style: const TextStyle(fontSize: 18));
+    }
   }
 
   Widget _amountField(String title, {bool isPassword = false}) {

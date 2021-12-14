@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:isolate';
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
@@ -13,7 +17,24 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
+printHello({required BuildContext context}) async {
+  print('refreshing data and checking minimum rates');
+  BlocProvider.of<CurrencylistBloc>(context).add(AutoUpdateAllCurrenciesList());
+}
+
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    const oneSec = Duration(seconds: 120);
+    Timer.periodic(
+        oneSec,
+        (Timer t) => {
+              BlocProvider.of<CurrencylistBloc>(context)
+                  .add(AutoUpdateAllCurrenciesList())
+            });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CurrencylistBloc, CurrencylistState>(
@@ -39,7 +60,8 @@ class _SplashScreenState extends State<SplashScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const GlobalCurrencyConvetor()),
+                            builder: (context) =>
+                                const GlobalCurrencyConvetor()),
                       );
                     },
                     child: SizedBox(

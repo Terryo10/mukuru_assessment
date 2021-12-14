@@ -97,7 +97,7 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
       }
 
       var newList = jsonEncode(oldList);
-     
+
       await DatabaseHelper.instance.updateCurrency(
           currencyMonitor: CurrencyMonitor(
               id: event.currencyMonitor.id,
@@ -109,6 +109,49 @@ class CurrencylistBloc extends Bloc<CurrencylistEvent, CurrencylistState> {
             await DatabaseHelper.instance.getMonitoredCurrencies();
 
         yield currentState.copyWith(myCurrencies: currentList);
+      }
+    }
+
+    if (event is AutoUpdateAllCurrenciesList) {
+      print('automated checking trriggered');
+      //get all monitored currencies in app
+      var currentTime = DateTime.now();
+
+      List<CurrencyMonitor> currencyList =
+          await DatabaseHelper.instance.getMonitoredCurrencies();
+
+      if (currencyList.isNotEmpty) {
+        for (var element in currencyList) {
+          var oldCurrencyMonitor =
+              currencyRefinedModelFromJson(element.monitoredCurrency);
+          List oldList = jsonDecode(element.updates);
+
+          var currentExchangeState = exchangeRatesBloc.state;
+          if (currentExchangeState is ExchangeRatesLoadedState) {
+            var selectedRate = currentExchangeState
+                .exchangeRatesModel.rates![oldCurrencyMonitor.abr];
+            oldList.add(
+              WatchedLogsModel(
+                checkedAt: currentTime,
+                minimumRate: oldCurrencyMonitor.warningRate,
+                rate: selectedRate!.toDouble(),
+              ),
+            );
+            var newList = jsonEncode(oldList);
+            await DatabaseHelper.instance.updateCurrency(
+                currencyMonitor: CurrencyMonitor(
+                    id: element.id,
+                    monitoredCurrency: element.monitoredCurrency,
+                    rate: element.rate,
+                    updates: newList));
+            if (currentState is CurrencylistLoadedState) {
+              var currentList =
+                  await DatabaseHelper.instance.getMonitoredCurrencies();
+
+              yield currentState.copyWith(myCurrencies: currentList);
+            }
+          }
+        }
       }
     }
   }

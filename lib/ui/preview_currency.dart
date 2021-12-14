@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mukuru_app/bloc/currency_list_bloc/currencylist_bloc.dart';
 import 'package:mukuru_app/bloc/exchange_rates_bloc/exchangerates_bloc.dart';
-import 'package:mukuru_app/database/monitored_currencies_database.dart';
+import 'package:intl/intl.dart';
 import 'package:mukuru_app/models/exchange_rate_model.dart';
 import 'package:mukuru_app/models/refined_currency_list_model.dart';
+import 'package:mukuru_app/models/watched_logs_model.dart';
 
 import 'conversion_page.dart';
 import 'extras/currency_preview_error.dart';
@@ -140,7 +143,7 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                       // ignore: deprecated_member_use
                       child: FlatButton(
                         child: const Text(
-                          'refresh',
+                          'Update Logs for this currency',
                           style: TextStyle(fontSize: 20.0),
                         ),
                         color: Colors.blueAccent,
@@ -155,7 +158,10 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Text(transactions.updates.toString()),
+                    // Text(transactions.updates.toString()),
+                    SizedBox(
+                        height: 300,
+                        child: logs(data: jsonDecode(transactions.updates)))
                   ],
                 );
               }
@@ -165,24 +171,25 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
         ));
   }
 
-  Widget transactionHistory({required List<CurrencyMonitor> data}) {
+  Widget logs({required data}) {
     if (data.isEmpty) {
       return const Center(
         child: Text('You have no monitored currencies'),
       );
     }
+    var tom = data[0];
+    print(watchedLogsModelFromJson(jsonEncode(tom)));
+    // return Text(data.toString());
     return ListView.builder(
+        shrinkWrap: true,
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
-          // print(data[index].monitoredCurrency);
-          // var mappedString = json.encode(data[index].monitoredCurrency);
-          return currencyCard(
-            data: currencyRefinedModelFromJson(data[index].monitoredCurrency),
-          );
+          return logCard(
+              data: (watchedLogsModelFromJson(jsonEncode(data[index]))));
         });
   }
 
-  Widget currencyCard({required CurrencyRefinedModel data}) {
+  Widget logCard({required WatchedLogsModel data}) {
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -217,7 +224,9 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${data.name.toString()} (${data.abr})',
+                          DateFormat.yMd().add_jm().format(
+                                  DateTime.parse(data.checkedAt.toString())) +
+                              ' rate: ${data.rate}  vs ${data.minimumRate}',
                           style: const TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -227,16 +236,6 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
                         ),
                       ],
                     )),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.delete_forever,
-                        color: Colors.red,
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -249,34 +248,34 @@ class _PreviewCurrencyState extends State<PreviewCurrency> {
       ),
     );
   }
+}
 
-  Widget loading() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 100),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 200.0,
-              child: Stack(
-                children: const <Widget>[
-                  Center(
-                    child: SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: CircularProgressIndicator(
-                        backgroundColor: Color(0xfff7892b),
-                      ),
+Widget loading() {
+  return Padding(
+      padding: const EdgeInsets.only(top: 100),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 200.0,
+            child: Stack(
+              children: const <Widget>[
+                Center(
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Color(0xfff7892b),
                     ),
                   ),
-                  Center(
-                      child: Text(
-                    'Loading ...',
-                    style: TextStyle(color: Colors.black),
-                  )),
-                ],
-              ),
+                ),
+                Center(
+                    child: Text(
+                  'Loading ...',
+                  style: TextStyle(color: Colors.black),
+                )),
+              ],
             ),
-          ],
-        ));
-  }
+          ),
+        ],
+      ));
 }
